@@ -1,32 +1,18 @@
 ---
-import { render } from 'astro:content';
 import { getPublished } from '../../lib/content';
-import ArticleLayout from '../../layouts/ArticleLayout.astro';
 
 export async function getStaticPaths() {
   const essays = await getPublished('essay', {
     orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   });
-  return essays.map((essay, index) => {
-    const prevEntry = essays.at(index - 1);
-    const nextEntry = essays.at(index + 1);
+  return essays.map((entry) => {
+    const slug = entry.data.slug ?? entry.id;
     return {
-      params: { slug: essay.data.slug ?? essay.id },
-      props: {
-        essay,
-        prev: prevEntry
-          ? { href: `/essay/${prevEntry.data.slug ?? prevEntry.id}/`, title: prevEntry.data.title }
-          : null,
-        next: nextEntry
-          ? { href: `/essay/${nextEntry.data.slug ?? nextEntry.id}/`, title: nextEntry.data.title }
-          : null
-      }
+      params: { slug },
+      props: { slug }
     };
   });
 }
 
-const { essay, prev, next } = Astro.props;
-const { Content } = await render(essay);
+return Astro.redirect(`/archive/${Astro.params.slug}/`, 301);
 ---
-
-<ArticleLayout entry={essay} Content={Content} typeLabel="随笔" prev={prev} next={next} />

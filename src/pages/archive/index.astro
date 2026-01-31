@@ -4,17 +4,14 @@ import { getPublished } from '../../lib/content';
 import { groupByYear, formatMonthDay, formatISODate } from '../../utils/format';
 import { PAGE_SIZE_ARCHIVE } from '../../../site.config.mjs';
 
-const posts = await getPublished('posts', {
-  orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-});
 const essays = await getPublished('essay', {
   orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 });
 
-const archiveItems = [
-  ...posts.filter((post) => post.data.archive !== false).map((entry) => ({ type: 'posts', entry })),
-  ...essays.filter((entry) => entry.data.archive !== false).map((entry) => ({ type: 'essay', entry }))
-].sort((a, b) => b.entry.data.date.valueOf() - a.entry.data.date.valueOf());
+const archiveItems = essays
+  .filter((entry) => entry.data.archive !== false)
+  .map((entry) => ({ entry }))
+  .sort((a, b) => b.entry.data.date.valueOf() - a.entry.data.date.valueOf());
 
 const totalPages = Math.ceil(archiveItems.length / PAGE_SIZE_ARCHIVE);
 const currentPage = 1;
@@ -36,9 +33,9 @@ const nextHref = currentPage < totalPages ? `/archive/page/${currentPage + 1}/` 
     <section>
       <h2 class="archive-year">{g.year}</h2>
       <div class="archive-list">
-        {g.list.map(({ type, entry }) => {
+        {g.list.map(({ entry }) => {
           const slug = entry.data.slug ?? entry.id;
-          const href = type === 'posts' ? `/archive/${slug}/` : `/essay/${slug}/`;
+          const href = `/archive/${slug}/`;
           const tag = entry.data.tags?.[0];
           return (
           <div class="archive-row">

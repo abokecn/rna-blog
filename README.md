@@ -17,7 +17,7 @@
 
 - 双栏布局（侧栏导航 + 内容区）
 - 移动端适配
-- 内容集合：posts / essay / bits / kids
+- 内容集合：随笔 / 小记 / 孩童（归档为目录视图）
 - RSS：聚合 + 分栏订阅
 - 浅色 / 深色模式 + 阅读模式
 
@@ -79,19 +79,19 @@ npm run build && npm run preview
 ## 内容与路由
 
 内容集合（Content Collections）：
-- posts：位于 `src/content/posts` 目录
-- essay：位于 `src/content/essay` 目录
-- bits：位于 `src/content/bits` 目录
-- kids：位于 `src/content/kids/index.md`
+- 随笔：位于 `src/content/essay` 目录
+- 小记：位于 `src/content/bits` 目录
+- 孩童：位于 `src/content/kids/index.md`
+- 归档：由随笔集合按 `archive` 字段生成目录视图
 
 主要路由：
 - 列表页：`/archive/`、`/essay/`、`/bits/`、`/kids/`、`/about/`
-- 详情页：posts / essay 使用 `[...slug]`
+- 详情页：`/archive/[...slug]`（唯一入口）
 
 
 ## 核心字段（Frontmatter）
 
-posts / essay：
+随笔：
 ```yaml
 title: My Post
 date: 2026-01-01
@@ -108,6 +108,7 @@ draft: true
 ```
 
 `draft: true` 的内容会从列表与 RSS 中过滤。
+`archive: false` 会从 `/archive/` 与 `/archive/rss.xml` 排除，但仍保留详情页与 `/essay/` 列表。
 
 
 ## 摘要与描述（description）

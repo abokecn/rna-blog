@@ -5,19 +5,11 @@ import EntryListItem from '../components/EntryListItem.astro';
 import { getPublished } from '../lib/content';
 import { getListExcerpt } from '../utils/excerpt';
 
-const posts = await getPublished('posts', {
-  orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-});
 const essays = await getPublished('essay', {
   orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 });
 
-const merged = [
-  ...posts.map((entry) => ({ type: 'posts', entry })),
-  ...essays.map((entry) => ({ type: 'essay', entry }))
-].sort((a, b) => b.entry.data.date.valueOf() - a.entry.data.date.valueOf());
-
-const latest = merged.slice(0, 12);
+const latest = essays.slice(0, 12);
 ---
 
 <BaseLayout bodyClass="home">
@@ -33,9 +25,9 @@ const latest = merged.slice(0, 12);
   <h2 class="section-title section-title--index">索引</h2>
 
   <div class="list">
-    {latest.map(({ type, entry }) => {
+    {latest.map((entry) => {
       const slug = entry.data.slug ?? entry.id;
-      const href = type === 'posts' ? `/archive/${slug}/` : `/essay/${slug}/`;
+      const href = `/archive/${slug}/`;
       const tag = entry.data.tags?.[0];
       return (
         <EntryListItem

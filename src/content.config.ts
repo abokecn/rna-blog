@@ -17,14 +17,6 @@ const baseFields = {
   slug: slugRule.optional()
 };
 
-const posts = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
-  schema: z.object({
-    ...baseFields,
-    cover: z.string().optional()
-  })
-});
-
 const essay = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/essay' }),
   schema: z.object({
@@ -61,4 +53,4 @@ const kids = defineCollection({
   })
 });
 
-export const collections = { posts, essay, bits, kids };
+export const collections = { essay, bits, kids };

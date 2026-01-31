@@ -9,12 +9,14 @@ const {
   tag,
   badge = '随笔'
 } = Astro.props;
+
+const displayBadge = badge?.trim() ? badge : '随笔';
 ---
 
 <a class="list-item list-item--link" href={href}>
   <div class="list-item__row">
     <div style="display:flex; align-items:center; gap:10px;">
-      {badge ? <span class="badge">{badge}</span> : null}
+      <span class="badge">{displayBadge}</span>
       <h3 class="list-item__title" style="margin:0;">{title}</h3>
     </div>
   </div>

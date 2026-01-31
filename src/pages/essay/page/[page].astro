@@ -40,7 +40,7 @@ const pageTitle = `随笔 · 第 ${currentPage} 页`;
   <div class="list">
     {pageEssays.map((e) => (
       <EssayCard
-        href={`/essay/${e.data.slug ?? e.id}/`}
+        href={`/archive/${e.data.slug ?? e.id}/`}
         title={e.data.title}
         excerpt={getListExcerpt(e)}
         date={e.data.date}
