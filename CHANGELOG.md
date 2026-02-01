@@ -11,16 +11,23 @@ The format is based on Keep a Changelog, and this project aims to follow Semanti
 - README 一键部署增加部署后检查清单
 - 新增 `tools/charset-base.txt`（3500 常用字基础表）
 - essay 新增 `archive` 字段（默认 true），用于控制是否进入归档与归档 RSS
+- 新增 sitemap 生成（`@astrojs/sitemap`），仅在设置 `SITE_URL` 时启用
+- 新增构建期 `robots.txt`（`src/pages/robots.txt.ts`），仅在设置 `SITE_URL` 时输出 `Sitemap:` 行
 ### Changed
 - 构建时强制内联样式表（`inlineStylesheets: 'always'`），减少首屏阻塞 CSS
 - `SITE_URL` 缺失时不再输出 canonical/og:url（避免相对 URL 被判错）
 - 生产环境未设置 `SITE_URL` 时输出警告日志
+- `SITE_URL` 缺失时的日志提示补充 sitemap/robots 说明
 - 一键部署说明补充 `SITE_URL` 对 canonical/og:url 与 RSS 的作用
+- README 更新 Cloudflare Pages 部署说明与 `SITE_URL` 必设提示
 - README 补充演示链接与截图，并调整 CI 徽章样式
 - package.json 补充开源元信息（license/repository/bugs/homepage）并标记为可发布
-- 侧栏英文引言文案更新
 - 页脚年份改为自动区间（2025–当前年）
 - 移动端侧栏图标组收紧间距并右对齐（避免顶部遮挡）
+- 首页补充隐藏 `<h1>` 与 `sr-only` 样式
+- BaseLayout 增加 skip link 与主内容锚点
+- /bits 搜索补充可访问 label
+- 全局链接补充 `:focus-visible` 样式
 - 首页 Hero 图改为本地 `astro:assets` 图片输出，新增多格式（AVIF/WebP）与更精确 sizes；LCP 优先级由 `isLCP` 控制
 - LXGW WenKai Lite 字体改为三段子集（latin/common/ext）并使用 unicode-range 按需加载，移除大字体 preload；新增字体构建脚本与可提交子集文件
 - Noto Serif SC 改为自托管并子集化（400/600），移除 Google Fonts 依赖
@@ -33,6 +40,7 @@ The format is based on Keep a Changelog, and this project aims to follow Semanti
 ### Fixed
 - `robots.txt` 移除误导性的 sitemap 注释
 - 桌面端导航链接点击区域由整行收敛到文本范围
+- 统一 `page/` 保留 slug 过滤，避免列表与详情不一致导致潜在 404
 
 ## [0.1.0] - 2026-01-28 (Pre-release)
 ### Added

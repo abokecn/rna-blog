@@ -1,5 +1,5 @@
 import rss from '@astrojs/rss';
-import { getPublished } from '../../lib/content';
+import { getPublished, isReservedSlug } from '../../lib/content';
 import { site } from '../../../site.config.mjs';
 
 export async function GET(context) {
@@ -7,12 +7,13 @@ export async function GET(context) {
     includeDraft: false,
     orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   });
+  const visibleEssays = essays.filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id));
 
   return rss({
     title: `${site.title} · 随笔`,
     description: '随笔与杂记更新',
     site: context.site,
-    items: essays.map((entry) => ({
+    items: visibleEssays.map((entry) => ({
       title: entry.data.title,
       pubDate: entry.data.date,
       description: entry.data.description,

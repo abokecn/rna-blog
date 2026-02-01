@@ -5,7 +5,7 @@ const fallbackSiteUrl = 'https://example.invalid';
 
 if (!hasSiteUrl && process.env.NODE_ENV === 'production') {
   console.warn(
-    '[astro-whono] SITE_URL is not set. RSS will use example.invalid; canonical/og will be omitted.'
+    '[astro-whono] SITE_URL is not set. RSS will use example.invalid; canonical/og will be omitted; sitemap will not be generated and robots will not include Sitemap.'
   );
 }
 

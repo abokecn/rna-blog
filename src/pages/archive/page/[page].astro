@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { getPublished } from '../../../lib/content';
+import { getPublished, isReservedSlug } from '../../../lib/content';
 import { groupByYear, formatMonthDay, formatISODate } from '../../../utils/format';
 import { PAGE_SIZE_ARCHIVE } from '../../../../site.config.mjs';
 
@@ -8,7 +8,9 @@ export async function getStaticPaths() {
   const essays = await getPublished('essay', {
     orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   });
-  const archiveItems = essays.filter((entry) => entry.data.archive !== false);
+  const archiveItems = essays
+    .filter((entry) => entry.data.archive !== false)
+    .filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id));
   const totalPages = Math.ceil(archiveItems.length / PAGE_SIZE_ARCHIVE);
   if (totalPages <= 1) return [];
 
@@ -23,6 +25,7 @@ const essays = await getPublished('essay', {
 });
 const archiveItems = essays
   .filter((entry) => entry.data.archive !== false)
+  .filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id))
   .map((entry) => ({ entry }))
   .sort((a, b) => b.entry.data.date.valueOf() - a.entry.data.date.valueOf());
 const totalPages = Math.ceil(archiveItems.length / PAGE_SIZE_ARCHIVE);

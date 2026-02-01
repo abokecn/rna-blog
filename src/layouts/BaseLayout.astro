@@ -57,10 +57,11 @@ const yearRange = currentYear > startYear ? `${startYear}-${currentYear}` : `${s
     <slot name="head" />
   </head>
   <body class={bodyClass}>
+    <a class="skip-link" href="#content">跳到内容</a>
     <div class="shell">
       <Sidebar siteTitle={brandTitle} />
       <div class="divider" aria-hidden="true"></div>
-      <main class="content">
+      <main id="content" class="content" tabindex="-1">
         <div class="content__inner">
           <slot />
           <footer class="site-footer">© {yearRange} Whono · Theme Demo · by cxro</footer>

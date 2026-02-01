@@ -11,6 +11,8 @@ export type GetPublishedOptions<K extends CollectionKey> = {
   includeDraft?: boolean;
 };
 
+export const isReservedSlug = (slug: string) => slug.startsWith('page/');
+
 export async function getPublished<K extends CollectionKey>(
   name: K,
   opts: GetPublishedOptions<K> = {}

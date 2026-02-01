@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPublished } from '../../lib/content';
+import { getPublished, isReservedSlug } from '../../lib/content';
 import { groupByYear, formatMonthDay, formatISODate } from '../../utils/format';
 import { PAGE_SIZE_ARCHIVE } from '../../../site.config.mjs';
 
@@ -10,6 +10,7 @@ const essays = await getPublished('essay', {
 
 const archiveItems = essays
   .filter((entry) => entry.data.archive !== false)
+  .filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id))
   .map((entry) => ({ entry }))
   .sort((a, b) => b.entry.data.date.valueOf() - a.entry.data.date.valueOf());
 

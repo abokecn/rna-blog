@@ -49,14 +49,30 @@ npm run build && npm run preview
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/cxro/astro-whono) [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/cxro/astro-whono) <a href="https://dash.cloudflare.com/?to=/:account/workers-and-pages"><img src="https://img.shields.io/badge/Deploy-Cloudflare%20Pages-F38020?style=flat&logo=cloudflare&logoColor=white" alt="Deploy to Cloudflare Pages" height="32" /></a>
 
-部署参数（手动导入仓库时填写）：
-- Framework preset：Astro（Cloudflare Pages）
+<details>
+  <summary><strong>Cloudflare Pages 部署（手动导入仓库）</strong></summary>
+
+在 Cloudflare Pages 创建项目时，按下面填写：
+
+**构建设置（必填）**
+- Framework preset：Astro
 - Build command：`npm run build`
 - Output directory：`dist`
-- Node version：`22.22`
-- 环境变量（建议）：`SITE_URL=https://<你的域名>`
-- 不设置 `SITE_URL` 也能部署，但 RSS/OG/canonical 可能使用相对链接或占位域名（`example.invalid`）
-- 生产环境建议配置 `SITE_URL`，用于生成 canonical/og:url（绝对 URL）和 RSS 链接
+
+**Node.js 版本（通常不用填）**
+- 本项目已提供 `.nvmrc`，Cloudflare Pages 会自动读取。
+- 如需手动指定，可在 Pages 的环境变量里设置：`NODE_VERSION=22.22.0`
+
+**环境变量（强烈推荐：生产环境一定要设）**
+- 在 Pages 项目 → Settings → Environment variables 添加：`SITE_URL=https://你的域名`（例如 `https://astro.whono.me`，不要以 `/` 结尾）
+
+**为什么要设 `SITE_URL`？**
+- Astro 会用它生成 canonical、Open Graph 的 `og:url`、RSS 链接、sitemap 等“必须是完整网址”的内容；不设置时，站点也能部署，但这些链接可能变成相对地址或占位域名，影响分享预览和搜索引擎收录。
+
+**关于 sitemap / robots**
+- 只有设置了 `SITE_URL`，才会生成 sitemap，并且 `/robots.txt` 才会输出 `Sitemap:` 行（避免指向错误域名）。
+
+</details>
 
 <details>
 <summary><strong>部署后检查</strong></summary>

@@ -2,17 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroImage from '../components/HeroImage.astro';
 import EntryListItem from '../components/EntryListItem.astro';
-import { getPublished } from '../lib/content';
+import { getPublished, isReservedSlug } from '../lib/content';
 import { getListExcerpt } from '../utils/excerpt';
 
 const essays = await getPublished('essay', {
   orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 });
 
-const latest = essays.slice(0, 12);
+const visibleEssays = essays.filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id));
+const latest = visibleEssays.slice(0, 12);
 ---
 
 <BaseLayout bodyClass="home">
+  <h1 class="sr-only">Astro Themes by Whono</h1>
   <div class="hero">
     <HeroImage isLCP />
   </div>

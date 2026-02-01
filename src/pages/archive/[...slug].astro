@@ -1,16 +1,13 @@
 ---
 import { render } from 'astro:content';
-import { getPublished } from '../../lib/content';
+import { getPublished, isReservedSlug } from '../../lib/content';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
 
 export async function getStaticPaths() {
   const essays = await getPublished('essay', {
     orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   });
-  const archiveEssays = essays.filter((entry) => {
-    const slug = entry.data.slug ?? entry.id;
-    return !slug.startsWith('page/');
-  });
+  const archiveEssays = essays.filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id));
   return archiveEssays.map((entry, index) => {
     const prevEntry = archiveEssays.at(index - 1);
     const nextEntry = archiveEssays.at(index + 1);

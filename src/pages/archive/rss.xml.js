@@ -1,5 +1,5 @@
 import rss from '@astrojs/rss';
-import { getPublished } from '../../lib/content';
+import { getPublished, isReservedSlug } from '../../lib/content';
 import { site } from '../../../site.config.mjs';
 
 export async function GET(context) {
@@ -9,6 +9,7 @@ export async function GET(context) {
   });
   const archiveItems = essays
     .filter((entry) => entry.data.archive !== false)
+    .filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id))
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
   return rss({

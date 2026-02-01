@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import EssayCard from '../../../components/EssayCard.astro';
-import { getPublished } from '../../../lib/content';
+import { getPublished, isReservedSlug } from '../../../lib/content';
 import { getListExcerpt } from '../../../utils/excerpt';
 import { PAGE_SIZE_ESSAY } from '../../../../site.config.mjs';
 
@@ -9,7 +9,8 @@ export async function getStaticPaths() {
   const essays = await getPublished('essay', {
     orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   });
-  const totalPages = Math.ceil(essays.length / PAGE_SIZE_ESSAY);
+  const visibleEssays = essays.filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id));
+  const totalPages = Math.ceil(visibleEssays.length / PAGE_SIZE_ESSAY);
   if (totalPages <= 1) return [];
 
   return Array.from({ length: totalPages - 1 }, (_, i) => ({
@@ -21,9 +22,10 @@ const currentPage = Number(Astro.params.page);
 const essays = await getPublished('essay', {
   orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 });
-const totalPages = Math.ceil(essays.length / PAGE_SIZE_ESSAY);
+const visibleEssays = essays.filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id));
+const totalPages = Math.ceil(visibleEssays.length / PAGE_SIZE_ESSAY);
 const start = (currentPage - 1) * PAGE_SIZE_ESSAY;
-const pageEssays = essays.slice(start, start + PAGE_SIZE_ESSAY);
+const pageEssays = visibleEssays.slice(start, start + PAGE_SIZE_ESSAY);
 
 const showPagination = totalPages > 1;
 const prevHref = currentPage === 2 ? '/essay/' : `/essay/page/${currentPage - 1}/`;
@@ -34,7 +36,7 @@ const pageTitle = `随笔 · 第 ${currentPage} 页`;
 <BaseLayout title={pageTitle} bodyClass="essay-page">
   <div class="page-header page-header--essay">
     <h1 class="page-title">随笔</h1>
-    <span class="page-subtitle">随笔与杂记，共 {essays.length} 篇 · 第 {currentPage} / {totalPages} 页 · <a href="/essay/rss.xml">RSS</a></span>
+    <span class="page-subtitle">随笔与杂记，共 {visibleEssays.length} 篇 · 第 {currentPage} / {totalPages} 页 · <a href="/essay/rss.xml">RSS</a></span>
   </div>
 
   <div class="list">

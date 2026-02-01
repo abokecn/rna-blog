@@ -1,11 +1,12 @@
 ---
-import { getPublished } from '../../lib/content';
+import { getPublished, isReservedSlug } from '../../lib/content';
 
 export async function getStaticPaths() {
   const essays = await getPublished('essay', {
     orderBy: (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   });
-  return essays.map((entry) => {
+  const visibleEssays = essays.filter((entry) => !isReservedSlug(entry.data.slug ?? entry.id));
+  return visibleEssays.map((entry) => {
     const slug = entry.data.slug ?? entry.id;
     return {
       params: { slug },
