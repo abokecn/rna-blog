@@ -12,7 +12,7 @@ if (!hasSiteUrl && process.env.NODE_ENV === 'production') {
 export const site = {
   url: hasSiteUrl ? siteUrl : fallbackSiteUrl,
   title: ' RNA Blog ',
-  brandTitle: 'RNA',
+  brandTitle: 'RNA Blog',
   author: 'RNA',
   authorAvatar: 'author/avatar.webp',
   description: 'The RNA Blog'
